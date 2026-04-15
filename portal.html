@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ArenaMudir — Espace Client</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -181,7 +181,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text
       <input type="password" class="input-field" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
     <div class="form-error" id="loginError"></div>
-    <button class="btn-action" id="btnLogin" onclick="doLogin()">Se connecter</button>
+    <button class="btn-action" id="btnLogin">Se connecter</button>
     <div class="box-footer">Pas encore client? <a href="index.html">Voir nos plans →</a></div>
   </div>
 </div>
@@ -193,7 +193,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text
     <div class="expired-title">Abonnement expiré</div>
     <div class="expired-sub">Votre abonnement a expiré. Contactez-nous pour le renouveler.</div>
     <a href="/cdn-cgi/l/email-protection#a4c7cbcad0c5c7d0e4c5d6c1cac5c9d1c0cdd68ac7cbc99bd7d1c6cec1c7d099f6c1cacbd1d2c1c8c8c1c9c1cad0" class="btn-email">📧 Renouveler</a>
-    <br/><button class="btn-ghost" onclick="doLogout()">Déconnexion</button>
+    <br/><button class="btn-ghost" id="btnLogoutExpired">Déconnexion</button>
   </div>
 </div>
 
