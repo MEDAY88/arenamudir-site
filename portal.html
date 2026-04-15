@@ -174,11 +174,11 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text
     <div class="box-sub">Espace client — Connectez-vous</div>
     <div class="input-group">
       <label>Email</label>
-      <input type="email" class="input-field" id="loginEmail" placeholder="votre@email.com" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <input type="email" class="input-field" id="loginEmail" placeholder="votre@email.com" />
     </div>
     <div class="input-group">
       <label>Mot de passe</label>
-      <input type="password" class="input-field" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <input type="password" class="input-field" id="loginPassword" placeholder="••••••••" />
     </div>
     <div class="form-error" id="loginError"></div>
     <button class="btn-action" id="btnLogin">Se connecter</button>
@@ -207,14 +207,14 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text
       <span id="loungeStatusText">—</span>
     </div>
     <div class="plan-badge local" id="planBadge">—</div>
-    <button class="btn-logout" onclick="doLogout()">⏻</button>
+    <button class="btn-logout" id="btnLogout">⏻</button>
   </div>
 
   <div class="tabs" id="tabsBar">
-    <div class="tab active" onclick="switchTab('overview')">📊 Vue d'ensemble</div>
-    <div class="tab" onclick="switchTab('live')" id="tabLive" style="display:none;">🔴 En direct</div>
-    <div class="tab" onclick="switchTab('history')">📋 Historique</div>
-    <div class="tab" onclick="switchTab('subscription')">🔑 Abonnement</div>
+    <div class="tab active" id="tab-overview">📊 Vue d'ensemble</div>
+    <div class="tab" id="tab-live" id="tabLive" style="display:none;">🔴 En direct</div>
+    <div class="tab" id="tab-history">📋 Historique</div>
+    <div class="tab" id="tab-subscription">🔑 Abonnement</div>
   </div>
 
   <div class="content">
@@ -262,7 +262,7 @@ body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text
           <div class="live-dot" id="liveDot"></div>
           <span id="liveStatusText" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Connexion...</span>
         </div>
-        <button class="btn-refresh" onclick="fetchLive()">🔄 Actualiser</button>
+        <button class="btn-refresh" id="btnRefresh">🔄 Actualiser</button>
       </div>
       <div id="tunnelManual" style="display:none;">
         <div class="tunnel-box" style="background:rgba(255,152,0,0.05);border-color:rgba(255,152,0,0.2);">
