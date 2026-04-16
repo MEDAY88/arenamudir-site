@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArenaMudir — Own a PS Lounge? Stop Losing Money.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-1: #040816;
+      --bg-2: #0b1224;
+      --panel: rgba(10,16,31,0.62);
+      --panel-2: rgba(13,20,38,0.78);
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(99,102,241,0.28);
+      --text: #f8fbff;
+      --muted: #97a4bd;
+      --primary: #6d7cff;
+      --secondary: #30d5ff;
+      --accent: #a855f7;
+      --green: #10b981;
+      --shadow: 0 24px 80px rgba(0,0,0,0.45);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+      --font-display: 'Bricolage Grotesque', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(109,124,255,0.16), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(48,213,255,0.12), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(168,85,247,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+
+    /* ── NAV ── */
+    .header {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(4,8,22,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 16px 0;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      font-family: var(--font-display); font-weight: 800;
+      letter-spacing: -0.03em; font-size: 1.1rem;
+    }
+    .logo-mark {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 24px rgba(109,124,255,0.75); flex-shrink: 0;
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .mini-link { color: var(--muted); font-size: 0.94rem; font-weight: 500; transition: color 0.2s; }
+    .mini-link:hover { color: white; }
+
+    /* LANG SWITCHER */
+    .lang-wrap { position: relative; }
+    .lang-trigger {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 14px; height: 38px; font-size: 18px; line-height: 1;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; cursor: pointer; transition: all 0.2s;
+      font-family: var(--font-body); color: var(--muted);
+    }
+    .lang-trigger:hover { border-color: rgba(109,124,255,0.3); background: rgba(109,124,255,0.08); }
+    .lang-trigger .arrow { font-size: 10px; transition: transform 0.2s; }
+    .lang-wrap.open .lang-trigger .arrow { transform: rotate(180deg); }
+    .lang-dropdown {
+      display: none; position: absolute; top: calc(100% + 8px); right: 0;
+      background: rgba(9,14,28,0.96); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 6px; min-width: 60px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5); backdrop-filter: blur(20px);
+      z-index: 200;
+    }
+    .lang-wrap.open .lang-dropdown { display: block; }
+    .lang-opt {
+      display: flex; align-items: center; justify-content: center;
+      padding: 8px; font-size: 20px; border-radius: 10px;
+      cursor: pointer; transition: background 0.15s; line-height: 1;
+    }
+    .lang-opt:hover { background: rgba(109,124,255,0.15); }
+    .lang-opt.active { background: rgba(109,124,255,0.2); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 10px; height: 38px; padding: 0 20px; border-radius: 10px;
+      font-weight: 700; font-family: var(--font-body); transition: all 0.2s;
+      white-space: nowrap; font-size: 0.9rem;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 14px 34px rgba(109,124,255,0.28);
+    }
+    .btn-primary:hover { box-shadow: 0 20px 48px rgba(109,124,255,0.4); }
+    .btn-secondary {
+      color: white; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    .btn-wa {
+      color: white; background: rgba(37,211,102,0.15);
+      border: 1px solid rgba(37,211,102,0.3);
+    }
+    .btn-wa:hover { background: rgba(37,211,102,0.25); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
+    .mobile-menu {
+      display: none; position: fixed; top: 65px; left: 0; right: 0;
+      background: rgba(4,8,22,0.97); border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 16px 24px 24px; flex-direction: column; gap: 8px; z-index: 99;
+      backdrop-filter: blur(20px);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { padding: 12px 0; color: var(--muted); font-size: 15px; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .mobile-menu a:last-child { border: none; }
+
+    /* ── HERO ── */
+    .hero { padding: 76px 0 54px; }
+    .hero-grid {
+      display: grid; grid-template-columns: 0.95fr 1.05fr;
+      gap: 34px; align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(109,124,255,0.20);
+      color: #d8ddff; font-size: 0.84rem; font-weight: 700;
+      margin-bottom: 20px; backdrop-filter: blur(10px);
+    }
+    .eyebrow::before {
+      content: ""; width: 8px; height: 8px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 14px rgba(109,124,255,0.8); flex-shrink: 0;
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4.4rem);
+      line-height: 1.0; letter-spacing: -0.04em;
+      margin-bottom: 18px; color: var(--text);
+    }
+    h1 .accent { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-copy p { color: var(--muted); font-size: clamp(1rem, 1.8vw, 1.12rem); max-width: 520px; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .hero-note { color: var(--muted); font-size: 0.88rem; }
+    .hero-trust { margin-top: 14px; font-size: 0.82rem; color: rgba(151,164,189,0.7); line-height: 1.8; }
+
+    .hero-frame {
+      position: relative; border-radius: var(--radius-xl); padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08); box-shadow: var(--shadow);
+      backdrop-filter: blur(10px); overflow: hidden;
+    }
+    .hero-frame::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(109,124,255,0.10), transparent 35%, rgba(48,213,255,0.08));
+      pointer-events: none;
+    }
+    .hero-badge {
+      position: absolute; top: 24px; left: 24px; z-index: 2;
+      padding: 8px 12px; border-radius: 10px;
+      background: rgba(6,11,24,0.80); border: 1px solid rgba(109,124,255,0.30);
+      font-size: 0.78rem; font-weight: 700; color: white; backdrop-filter: blur(8px);
+    }
+    .hero-image { position: relative; z-index: 1; border-radius: 18px; overflow: hidden; background: rgba(10,16,31,0.5); min-height: 280px; display: flex; align-items: center; justify-content: center; }
+    .hero-image img { width: 100%; height: auto; display: block; }
+    .hero-placeholder { color: var(--muted); font-size: 13px; text-align: center; padding: 60px 20px; }
+
+    /* ── SECTIONS ── */
+    .section { padding: 72px 0; }
+    .section-head { text-align: center; margin-bottom: 40px; }
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.04em; margin-bottom: 10px;
+    }
+    .section-head p { color: var(--muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+    /* ── CARDS ── */
+    .card {
+      position: relative; padding: 26px; border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(13,20,38,0.72), rgba(9,14,28,0.82));
+      border: 1px solid rgba(255,255,255,0.07); box-shadow: var(--shadow);
+      backdrop-filter: blur(14px); overflow: hidden; transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: rgba(109,124,255,0.2); }
+    .card::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(109,124,255,0.05), transparent 45%, rgba(48,213,255,0.04));
+      pointer-events: none;
+    }
+    .card h3 { font-family: var(--font-display); position: relative; z-index: 1; margin-bottom: 10px; font-size: 1.15rem; letter-spacing: -0.02em; color: white; }
+    .card p { position: relative; z-index: 1; color: var(--muted); font-size: 0.95rem; }
+    .card-top { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+
+    .step-number {
+      width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.94rem; font-weight: 800; color: white;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 12px 24px rgba(109,124,255,0.28);
+    }
+    .icon-wrap {
+      width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── RESULTS BOX ── */
+    .results-box {
+      margin-top: 22px; text-align: center; padding: 22px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(13,20,38,0.58), rgba(10,15,29,0.76));
+      border: 1px solid rgba(255,255,255,0.07); box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .results-box strong { display: block; font-size: 1rem; margin-bottom: 6px; color: white; }
+    .results-box span { color: var(--secondary); font-weight: 600; font-size: 0.95rem; }
+
+    /* ── PRICING ── */
+    .plan-recommended {
+      position: absolute; top: 18px; right: 18px; z-index: 2;
+      padding: 6px 11px; border-radius: 10px;
+      background: rgba(109,124,255,0.14); border: 1px solid rgba(109,124,255,0.24);
+      color: #dbe1ff; font-size: 0.75rem; font-weight: 800;
+    }
+    .plan-price { font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; color: white; letter-spacing: -1px; }
+    .plan-price span { font-size: 1rem; font-weight: 400; color: var(--muted); letter-spacing: 0; font-family: var(--font-body); }
+    .plan-roi { font-size: 0.82rem; color: var(--secondary); margin-top: 6px; }
+    .plan-feats { margin-top: 14px; color: var(--muted); font-size: 0.92rem; line-height: 1.9; }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      margin-top: 24px; border-radius: var(--radius-lg); overflow: hidden;
+      background: linear-gradient(180deg, rgba(10,16,31,0.76), rgba(8,12,24,0.86));
+      border: 1px solid rgba(255,255,255,0.07); box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .pricing-table { width: 100%; border-collapse: collapse; font-size: 0.94rem; }
+    .pricing-table th { text-align: left; padding: 16px 18px; color: #9fb0ff; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .pricing-table td { padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+    .pricing-table td:nth-child(2), .pricing-table td:nth-child(3),
+    .pricing-table th:nth-child(2), .pricing-table th:nth-child(3) { text-align: center; width: 20%; }
+    .group td { background: rgba(255,255,255,0.03); color: #7c8cff; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 1.5px; font-weight: 800; }
+    .highlight { color: var(--secondary); font-weight: 800; }
+    .no { color: rgba(255,255,255,0.2); }
+
+    /* ── MID CTA ── */
+    .mid-cta {
+      background: linear-gradient(135deg, rgba(109,124,255,0.08), rgba(168,85,247,0.06));
+      border-top: 1px solid rgba(109,124,255,0.15); border-bottom: 1px solid rgba(109,124,255,0.15);
+      padding: 44px 0; text-align: center;
+    }
+    .mid-cta .emotion {
+      font-size: 1rem; color: var(--secondary); font-weight: 700;
+      font-style: italic; margin-bottom: 10px;
+    }
+    .mid-cta h3 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.03em; }
+    .mid-cta p { color: var(--muted); font-size: 0.92rem; margin-bottom: 22px; }
+
+    /* ── FINAL CTA ── */
+    .cta-final-section { padding: 72px 0 48px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 28px 0;
+    }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-logo { font-family: var(--font-display); font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { color: var(--muted); font-size: 13px; font-weight: 500; transition: color 0.2s; }
+    footer a:hover { color: white; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { opacity: 0; }
+    .fade-up.visible { animation: fadeUp 0.6s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 920px) {
+      .hero-grid, .grid-2 { grid-template-columns: 1fr; }
+      .nav-right .mini-link, .nav-right .lang-switch { display: none; }
+      .hamburger { display: flex; }
+      .btn-wa { display: none; }
+    }
+    @media (max-width: 520px) {
+      .hero { padding: 56px 0 36px; }
+      .hero-actions { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      .section { padding: 52px 0; }
+    }
+
+    /* ── LANG ── */
+    .l { display: none; }
+    .l.on { display: inherit; }
+    span.l.on { display: inline; }
+    p.l.on, div.l.on, h1.l.on, h2.l.on, h3.l.on { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="header">
+  <div class="container nav">
+    <div class="logo"><div class="logo-mark"></div>ArenaMudir</div>
+    <div class="nav-right">
+      <a class="mini-link" href="#how">
+        <span class="l on" data-l="en">How it works</span>
+        <span class="l" data-l="fr">Comment ça marche</span>
+        <span class="l" data-l="ar">كيف يعمل</span>
+      </a>
+      <a class="mini-link" href="#gain">
+        <span class="l on" data-l="en">What you gain</span>
+        <span class="l" data-l="fr">Ce que vous gagnez</span>
+        <span class="l" data-l="ar">ما تكسبه</span>
+      </a>
+      <a class="mini-link" href="#plans">
+        <span class="l on" data-l="en">Plans</span>
+        <span class="l" data-l="fr">Plans</span>
+        <span class="l" data-l="ar">الخطط</span>
+      </a>
+      <a href="portal.html" class="mini-link" style="color:var(--primary); font-weight:700; border:1px solid rgba(109,124,255,0.25); padding:0 14px; height:38px; display:inline-flex; align-items:center; border-radius:10px; font-size:0.85rem;">
+        <span class="l on" data-l="en">Client portal</span>
+        <span class="l" data-l="fr">Espace client</span>
+        <span class="l" data-l="ar">بوابة العميل</span>
+      </a>
+      <div class="lang-wrap" id="langWrap">
+        <button class="lang-trigger" onclick="toggleLangMenu()" id="langTrigger">
+          <span id="langFlag">🇬🇧</span>
+          <span class="arrow">▾</span>
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          <div class="lang-opt" onclick="setLang('en')" data-flag="🇬🇧" title="English">🇬🇧</div>
+          <div class="lang-opt" onclick="setLang('fr')" data-flag="🇫🇷" title="Français">🇫🇷</div>
+          <div class="lang-opt" onclick="setLang('ar')" data-flag="🇸🇦" title="العربية">🇸🇦</div>
+        </div>
+      </div>
+      <a href="trial.html" class="btn btn-primary">
+        <span class="l on" data-l="en">Request a trial</span>
+        <span class="l" data-l="fr">Demander un essai</span>
+        <span class="l" data-l="ar">طلب تجربة</span>
+      </a>
+    </div>
+    <div class="hamburger" onclick="toggleMobile()" id="ham"><span></span><span></span><span></span></div>
+  </div>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#how" onclick="closeMobile()">How it works / Comment ça marche</a>
+  <a href="#gain" onclick="closeMobile()">What you gain / Ce que vous gagnez</a>
+  <a href="#plans" onclick="closeMobile()">Plans</a>
+  <a href="trial.html" onclick="closeMobile()" style="color:var(--primary);font-weight:700;">Request a trial →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <span class="l on" data-l="en">For PS / Xbox lounge owners</span>
+        <span class="l" data-l="fr">Pour les propriétaires de salles PS / Xbox</span>
+        <span class="l" data-l="ar">لأصحاب صالات PS / Xbox</span>
+      </div>
+
+      <h1>
+        <span class="l on" data-l="en">Own a PS lounge?<br/><span class="accent">Still using the remote?</span></span>
+        <span class="l" data-l="fr">Tu gères une salle PS?<br/><span class="accent">Encore à la main?</span></span>
+        <span class="l" data-l="ar">تملك صالة PS؟<br/><span class="accent">لا تزال تديرها يدويًا؟</span></span>
+      </h1>
+
+      <p>
+        <span class="l on" data-l="en">Stop losing time and money. ArenaMudir handles it — automatic timers, TV control, real-time revenue. All from one screen.</span>
+        <span class="l" data-l="fr">Arrête de perdre du temps et de l'argent. ArenaMudir gère tout — timers automatiques, contrôle TV, revenus en temps réel.</span>
+        <span class="l" data-l="ar">توقف عن خسارة الوقت والمال. ArenaMudir يتولى كل شيء — مؤقتات تلقائية، تحكم بالتلفزيون، إيرادات فورية.</span>
+      </p>
+
+      <div class="hero-actions">
+        <a href="trial.html" class="btn btn-primary">
+          <span class="l on" data-l="en">🚀 Request a trial</span>
+          <span class="l" data-l="fr">🚀 Demander un essai</span>
+          <span class="l" data-l="ar">🚀 طلب تجربة</span>
+        </a>
+        <a href="#" class="btn btn-wa" id="waBtn">
+          💬 <span class="l on" data-l="en">Contact on WhatsApp</span>
+          <span class="l" data-l="fr">Contacter sur WhatsApp</span>
+          <span class="l" data-l="ar">تواصل على WhatsApp</span>
+        </a>
+
+      </div>
+
+      <div class="hero-note">
+        <span class="l on" data-l="en">7-day free trial · No credit card · No commitment</span>
+        <span class="l" data-l="fr">7 jours gratuits · Sans carte · Sans engagement</span>
+        <span class="l" data-l="ar">7 أيام مجانية · بدون بطاقة · بدون التزام</span>
+      </div>
+
+      <div class="hero-trust">
+        <span class="l on" data-l="en">✔ 5-min setup &nbsp;·&nbsp; ✔ Works with Android TV &nbsp;·&nbsp; ✔ No special hardware</span>
+        <span class="l" data-l="fr">✔ Installation 5 min &nbsp;·&nbsp; ✔ Fonctionne avec Android TV &nbsp;·&nbsp; ✔ Aucun matériel spécial</span>
+        <span class="l" data-l="ar">✔ إعداد 5 دقائق &nbsp;·&nbsp; ✔ يعمل مع Android TV &nbsp;·&nbsp; ✔ لا حاجة لأجهزة خاصة</span>
+      </div>
+    </div>
+
+    <div class="hero-frame">
+      <div class="hero-badge">
+        <span class="l on" data-l="en">Live control dashboard</span>
+        <span class="l" data-l="fr">Tableau de bord en direct</span>
+        <span class="l" data-l="ar">لوحة التحكم المباشرة</span>
+      </div>
+      <div class="hero-image">
+        <img src="hero.jpg" alt="ArenaMudir Dashboard" onerror="this.parentElement.innerHTML='<div class=\'hero-placeholder\'>📺 ArenaMudir Dashboard<br/>hero.jpg — place your image here</div>'"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head">
+      <h2>
+        <span class="l on" data-l="en">How it works</span>
+        <span class="l" data-l="fr">Comment ça marche</span>
+        <span class="l" data-l="ar">كيف يعمل</span>
+      </h2>
+      <p>
+        <span class="l on" data-l="en">Simple. Fast. No technical skills needed.</span>
+        <span class="l" data-l="fr">Simple. Rapide. Aucune compétence technique requise.</span>
+        <span class="l" data-l="ar">بسيط. سريع. لا تحتاج خبرة تقنية.</span>
+      </p>
+    </div>
+    <div class="grid-2">
+      <div class="card fade-up">
+        <div class="card-top"><div class="step-number">1</div></div>
+        <h3><span class="l on" data-l="en">Install on your TV</span><span class="l" data-l="fr">Installez sur votre TV</span><span class="l" data-l="ar">ثبّت على تلفزيونك</span></h3>
+        <p><span class="l on" data-l="en">Open ArenaMudir TV app on each Android TV in seconds.</span><span class="l" data-l="fr">Ouvrez l'app ArenaMudir TV sur chaque Android TV.</span><span class="l" data-l="ar">افتح تطبيق ArenaMudir TV على كل Android TV.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="step-number">2</div></div>
+        <h3><span class="l on" data-l="en">Connect from your PC</span><span class="l" data-l="fr">Connectez depuis votre PC</span><span class="l" data-l="ar">اتصل من حاسوبك</span></h3>
+        <p><span class="l on" data-l="en">Connect your TVs in one click from the dashboard.</span><span class="l" data-l="fr">Connectez vos TV en un clic depuis le tableau de bord.</span><span class="l" data-l="ar">وصّل تلفزيوناتك بنقرة واحدة من لوحة التحكم.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="step-number">3</div></div>
+        <h3><span class="l on" data-l="en">Start sessions</span><span class="l" data-l="fr">Démarrez les sessions</span><span class="l" data-l="ar">ابدأ الجلسات</span></h3>
+        <p><span class="l on" data-l="en">Time is tracked automatically. Alerts at 5 and 2 minutes. TV locks when done.</span><span class="l" data-l="fr">Le temps est suivi automatiquement. Alertes à 5 et 2 min. TV bloquée à la fin.</span><span class="l" data-l="ar">يُتتبع الوقت تلقائيًا. تنبيهات عند 5 و2 دقيقة. التلفزيون يُغلق تلقائيًا.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="step-number">4</div></div>
+        <h3><span class="l on" data-l="en">Full control</span><span class="l" data-l="fr">Contrôle total</span><span class="l" data-l="ar">تحكم كامل</span></h3>
+        <p><span class="l on" data-l="en">100% control of your lounge · 0 lost minutes · 0 lost money.<br/><br/>24/7 support — we guide you step by step.</span><span class="l" data-l="fr">100% contrôle · 0 minute perdue · 0 argent perdu.<br/><br/>Support 24/7 — on vous accompagne pas à pas.</span><span class="l" data-l="ar">100% تحكم · 0 دقيقة ضائعة · 0 خسارة مالية.<br/><br/>دعم 24/7 — نرشدك خطوة بخطوة.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MID CTA -->
+<div class="mid-cta">
+  <div class="container">
+    <p class="emotion">
+      <span class="l on" data-l="en">"You can finally leave your lounge stress-free."</span>
+      <span class="l" data-l="fr">« Tu peux enfin quitter la salle sans stress. »</span>
+      <span class="l" data-l="ar">« يمكنك أخيرًا مغادرة الصالة بدون قلق. »</span>
+    </p>
+    <h3>
+      <span class="l on" data-l="en">Ready to automate your lounge?</span>
+      <span class="l" data-l="fr">Prêt à automatiser votre salle?</span>
+      <span class="l" data-l="ar">مستعد لأتمتة صالتك؟</span>
+    </h3>
+    <p>
+      <span class="l on" data-l="en">7-day free trial · No credit card · Cancel anytime</span>
+      <span class="l" data-l="fr">7 jours gratuits · Sans carte · Résiliation à tout moment</span>
+      <span class="l" data-l="ar">7 أيام مجانية · بدون بطاقة · إلغاء في أي وقت</span>
+    </p>
+    <a href="trial.html" class="btn btn-primary">
+      <span class="l on" data-l="en">Start now →</span>
+      <span class="l" data-l="fr">Commencer maintenant →</span>
+      <span class="l" data-l="ar">ابدأ الآن ←</span>
+    </a>
+  </div>
+</div>
+
+<!-- WHAT YOU GAIN -->
+<section class="section" id="gain">
+  <div class="container">
+    <div class="section-head">
+      <h2>
+        <span class="l on" data-l="en">What you gain</span>
+        <span class="l" data-l="fr">Ce que vous gagnez</span>
+        <span class="l" data-l="ar">ما تكسبه</span>
+      </h2>
+      <p>
+        <span class="l on" data-l="en">Everything you need to run your lounge like a real business.</span>
+        <span class="l" data-l="fr">Tout ce qu'il faut pour gérer votre salle comme une vraie entreprise.</span>
+        <span class="l" data-l="ar">كل ما تحتاجه لإدارة صالتك كعمل تجاري حقيقي.</span>
+      </p>
+    </div>
+    <div class="grid-2">
+      <div class="card fade-up">
+        <div class="card-top"><div class="icon-wrap">🚀</div></div>
+        <h3><span class="l on" data-l="en">Raise your level</span><span class="l" data-l="fr">Montez de niveau</span><span class="l" data-l="ar">ارتقِ بمستواك</span></h3>
+        <p><span class="l on" data-l="en">Automatic management system — your lounge runs itself.</span><span class="l" data-l="fr">Système de gestion automatique — votre salle se gère toute seule.</span><span class="l" data-l="ar">نظام إدارة تلقائي — صالتك تدير نفسها.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="icon-wrap">⚡</div></div>
+        <h3><span class="l on" data-l="en">Setup in minutes</span><span class="l" data-l="fr">Prêt en quelques minutes</span><span class="l" data-l="ar">جاهز في دقائق</span></h3>
+        <p><span class="l on" data-l="en">Ready in less than 15 minutes. No IT skills needed.</span><span class="l" data-l="fr">Prêt en moins de 15 minutes. Sans compétences informatiques.</span><span class="l" data-l="ar">جاهز في أقل من 15 دقيقة. لا تحتاج خبرة تقنية.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="icon-wrap">📶</div></div>
+        <h3><span class="l on" data-l="en">Works offline</span><span class="l" data-l="fr">Fonctionne hors ligne</span><span class="l" data-l="ar">يعمل بدون إنترنت</span></h3>
+        <p><span class="l on" data-l="en">Designed for unstable connections — your lounge never stops.</span><span class="l" data-l="fr">Conçu pour les connexions instables — votre salle ne s'arrête jamais.</span><span class="l" data-l="ar">مصمم للاتصالات غير المستقرة — صالتك لا تتوقف أبدًا.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="icon-wrap">📊</div></div>
+        <h3><span class="l on" data-l="en">Clear reports</span><span class="l" data-l="fr">Rapports clairs</span><span class="l" data-l="ar">تقارير واضحة</span></h3>
+        <p><span class="l on" data-l="en">No more guessing — every minute is tracked, every dinar counted.</span><span class="l" data-l="fr">Plus de doute — chaque minute est suivie, chaque dinar compté.</span><span class="l" data-l="ar">لا تخمين — كل دقيقة مُتتبَّعة، كل دينار محسوب.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="icon-wrap">🚫</div></div>
+        <h3><span class="l on" data-l="en">No more free play</span><span class="l" data-l="fr">Fini le jeu gratuit</span><span class="l" data-l="ar">لا مزيد من اللعب المجاني</span></h3>
+        <p><span class="l on" data-l="en">TVs stop automatically when time ends. Always.</span><span class="l" data-l="fr">Les TV s'arrêtent automatiquement. Toujours.</span><span class="l" data-l="ar">تتوقف التلفزيونات تلقائيًا عند انتهاء الوقت. دائمًا.</span></p>
+      </div>
+      <div class="card fade-up">
+        <div class="card-top"><div class="icon-wrap">🖥️</div></div>
+        <h3><span class="l on" data-l="en">Full control</span><span class="l" data-l="fr">Contrôle total</span><span class="l" data-l="ar">تحكم كامل</span></h3>
+        <p><span class="l on" data-l="en">See everything from one screen. Manage remotely with the Remote plan.</span><span class="l" data-l="fr">Tout voir depuis un seul écran. Gérez à distance avec le plan Remote.</span><span class="l" data-l="ar">شاهد كل شيء من شاشة واحدة. أدر عن بُعد مع خطة Remote.</span></p>
+      </div>
+    </div>
+    <div class="results-box">
+      <strong>0 <span class="l on" data-l="en">lost minutes</span><span class="l" data-l="fr">minute perdue</span><span class="l" data-l="ar">دقيقة ضائعة</span> &nbsp;·&nbsp; 0 <span class="l on" data-l="en">lost money</span><span class="l" data-l="fr">argent perdu</span><span class="l" data-l="ar">خسارة مالية</span> &nbsp;·&nbsp; <span class="l on" data-l="en">more control</span><span class="l" data-l="fr">plus de contrôle</span><span class="l" data-l="ar">تحكم أكبر</span></strong>
+      <span>24/7 <span class="l on" data-l="en">support — we guide you step by step.</span><span class="l" data-l="fr">support — on vous accompagne pas à pas.</span><span class="l" data-l="ar">دعم — نرشدك خطوة بخطوة.</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="section" id="plans">
+  <div class="container">
+    <div class="section-head">
+      <h2>
+        <span class="l on" data-l="en">Choose the plan that fits your lounge</span>
+        <span class="l" data-l="fr">Choisissez le plan adapté à votre salle</span>
+        <span class="l" data-l="ar">اختر الخطة المناسبة لصالتك</span>
+      </h2>
+      <p>
+        <span class="l on" data-l="en">Start simple. Upgrade anytime.</span>
+        <span class="l" data-l="fr">Commencez simplement. Évoluez à tout moment.</span>
+        <span class="l" data-l="ar">ابدأ ببساطة. طوّر في أي وقت.</span>
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-top"><div class="icon-wrap">🖥️</div></div>
+        <h3><span class="l on" data-l="en">Local Plan</span><span class="l" data-l="fr">Plan Local</span><span class="l" data-l="ar">الخطة المحلية</span></h3>
+        <p style="margin-bottom:14px;"><span class="l on" data-l="en">For lounges managed on-site.</span><span class="l" data-l="fr">Pour les salles gérées sur place.</span><span class="l" data-l="ar">للصالات التي تُدار في الموقع.</span></p>
+        <div class="plan-price">$20 <span>/ <span class="l on" data-l="en">month</span><span class="l" data-l="fr">mois</span><span class="l" data-l="ar">شهر</span></span></div>
+        <div class="plan-feats">
+          · <span class="l on" data-l="en">Control from your lounge PC</span><span class="l" data-l="fr">Contrôle depuis le PC de la salle</span><span class="l" data-l="ar">تحكم من حاسوب الصالة</span><br/>
+          · <span class="l on" data-l="en">Start and stop sessions</span><span class="l" data-l="fr">Démarrer et arrêter les sessions</span><span class="l" data-l="ar">بدء وإيقاف الجلسات</span><br/>
+          · <span class="l on" data-l="en">Timer and TV control</span><span class="l" data-l="fr">Timer et contrôle TV</span><span class="l" data-l="ar">مؤقت وتحكم بالتلفزيون</span><br/>
+          · <span class="l on" data-l="en">Revenue tracking</span><span class="l" data-l="fr">Suivi des revenus</span><span class="l" data-l="ar">تتبع الإيرادات</span><br/>
+          · <span class="l on" data-l="en">Works offline</span><span class="l" data-l="fr">Fonctionne hors ligne</span><span class="l" data-l="ar">يعمل بدون إنترنت</span>
+        </div>
+        <div style="margin-top:20px;">
+          <a href="trial.html" class="btn btn-secondary" style="width:100%;justify-content:center;">
+            <span class="l on" data-l="en">Start with Local</span>
+            <span class="l" data-l="fr">Commencer avec Local</span>
+            <span class="l" data-l="ar">ابدأ بالخطة المحلية</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:var(--line-strong); box-shadow: 0 24px 80px rgba(99,102,241,0.18), var(--shadow);">
+        <div class="plan-recommended">
+          <span class="l on" data-l="en">Recommended</span>
+          <span class="l" data-l="fr">Recommandé</span>
+          <span class="l" data-l="ar">موصى به</span>
+        </div>
+        <div class="card-top"><div class="icon-wrap">🌐</div></div>
+        <h3><span class="l on" data-l="en">Remote Plan</span><span class="l" data-l="fr">Plan Remote</span><span class="l" data-l="ar">خطة Remote</span></h3>
+        <p style="margin-bottom:14px;"><span class="l on" data-l="en">For owners who want visibility from anywhere.</span><span class="l" data-l="fr">Pour les propriétaires qui veulent surveiller de n'importe où.</span><span class="l" data-l="ar">لأصحاب الصالات الذين يريدون المراقبة من أي مكان.</span></p>
+        <div class="plan-price">$35 <span>/ <span class="l on" data-l="en">month</span><span class="l" data-l="fr">mois</span><span class="l" data-l="ar">شهر</span></span></div>
+        <div class="plan-roi">💡 <span class="l on" data-l="en">Pays for itself with 1–2 sessions/day</span><span class="l" data-l="fr">Rentabilisé avec 1–2 sessions/jour</span><span class="l" data-l="ar">يُسدّد نفسه بـ 1–2 جلسة يوميًا</span></div>
+        <div class="plan-feats">
+          · <span class="l on" data-l="en">Everything in Local</span><span class="l" data-l="fr">Tout du plan Local</span><span class="l" data-l="ar">كل ما في الخطة المحلية</span><br/>
+          · <span class="l on" data-l="en">Live remote view</span><span class="l" data-l="fr">Vue à distance en direct</span><span class="l" data-l="ar">عرض مباشر عن بُعد</span><br/>
+          · <span class="l on" data-l="en">Online reports</span><span class="l" data-l="fr">Rapports en ligne</span><span class="l" data-l="ar">تقارير عبر الإنترنت</span><br/>
+          · <span class="l on" data-l="en">Client portal</span><span class="l" data-l="fr">Portail client</span><span class="l" data-l="ar">بوابة العميل</span><br/>
+          · <span class="l on" data-l="en">Better control when away</span><span class="l" data-l="fr">Meilleur contrôle à distance</span><span class="l" data-l="ar">تحكم أفضل عند الغياب</span>
+        </div>
+        <div style="margin-top:20px;">
+          <a href="trial.html" class="btn btn-primary" style="width:100%;justify-content:center;">
+            <span class="l on" data-l="en">Go Remote</span>
+            <span class="l" data-l="fr">Passer au Remote</span>
+            <span class="l" data-l="ar">اختر Remote</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th><span class="l on" data-l="en">Features</span><span class="l" data-l="fr">Fonctionnalités</span><span class="l" data-l="ar">المميزات</span></th>
+            <th>Local — $20</th>
+            <th>Remote — $35</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group"><td colspan="3"><span class="l on" data-l="en">Lounge Management</span><span class="l" data-l="fr">Gestion de la salle</span><span class="l" data-l="ar">إدارة الصالة</span></td></tr>
+          <tr><td><span class="l on" data-l="en">Automatic TV control (WiFi)</span><span class="l" data-l="fr">Contrôle TV automatique (WiFi)</span><span class="l" data-l="ar">تحكم تلقائي بالتلفزيون</span></td><td>✔</td><td>✔</td></tr>
+          <tr><td><span class="l on" data-l="en">Sessions, timers, auto alerts</span><span class="l" data-l="fr">Sessions, timers, alertes auto</span><span class="l" data-l="ar">جلسات، مؤقتات، تنبيهات</span></td><td>✔</td><td>✔</td></tr>
+          <tr><td><span class="l on" data-l="en">Standard & VIP billing</span><span class="l" data-l="fr">Facturation standard & VIP</span><span class="l" data-l="ar">فوترة عادية وVIP</span></td><td>✔</td><td>✔</td></tr>
+          <tr><td><span class="l on" data-l="en">Unlimited local history</span><span class="l" data-l="fr">Historique local illimité</span><span class="l" data-l="ar">سجل محلي غير محدود</span></td><td>✔</td><td>✔</td></tr>
+          <tr><td><span class="l on" data-l="en">Auto recovery</span><span class="l" data-l="fr">Reprise automatique</span><span class="l" data-l="ar">استئناف تلقائي</span></td><td>✔</td><td>✔</td></tr>
+          <tr><td><span class="l on" data-l="en">Up to 20 stations</span><span class="l" data-l="fr">Jusqu'à 20 stations</span><span class="l" data-l="ar">حتى 20 محطة</span></td><td>✔</td><td>✔</td></tr>
+          <tr class="group"><td colspan="3"><span class="l on" data-l="en">Remote Access</span><span class="l" data-l="fr">Accès à distance</span><span class="l" data-l="ar">الوصول عن بُعد</span></td></tr>
+          <tr><td><span class="l on" data-l="en">Web client portal</span><span class="l" data-l="fr">Portail client web</span><span class="l" data-l="ar">بوابة العميل</span></td><td class="no">✖</td><td class="highlight"><span class="l on" data-l="en">Included</span><span class="l" data-l="fr">Inclus</span><span class="l" data-l="ar">مشمول</span></td></tr>
+          <tr><td><span class="l on" data-l="en">Live sessions from phone</span><span class="l" data-l="fr">Sessions en direct depuis téléphone</span><span class="l" data-l="ar">جلسات مباشرة من الهاتف</span></td><td class="no">✖</td><td class="highlight"><span class="l on" data-l="en">Included</span><span class="l" data-l="fr">Inclus</span><span class="l" data-l="ar">مشمول</span></td></tr>
+          <tr><td><span class="l on" data-l="en">Online reports (7 days)</span><span class="l" data-l="fr">Rapports en ligne (7 jours)</span><span class="l" data-l="ar">تقارير (7 أيام)</span></td><td class="no">✖</td><td class="highlight"><span class="l on" data-l="en">Included</span><span class="l" data-l="fr">Inclus</span><span class="l" data-l="ar">مشمول</span></td></tr>
+          <tr><td><span class="l on" data-l="en">Subscription status & renewal</span><span class="l" data-l="fr">Statut & renouvellement</span><span class="l" data-l="ar">الاشتراك والتجديد</span></td><td class="no">✖</td><td class="highlight"><span class="l on" data-l="en">Included</span><span class="l" data-l="fr">Inclus</span><span class="l" data-l="ar">مشمول</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="results-box" style="margin-top:20px;">
+      <strong>
+        <span class="l on" data-l="en">7-day free trial · No credit card · No commitment</span>
+        <span class="l" data-l="fr">7 jours gratuits · Sans carte · Sans engagement</span>
+        <span class="l" data-l="ar">7 أيام مجانية · بدون بطاقة · بدون التزام</span>
+      </strong>
+      <span>
+        <span class="l on" data-l="en">Start with the plan that matches your lounge today.</span>
+        <span class="l" data-l="fr">Commencez avec le plan qui correspond à votre salle aujourd'hui.</span>
+        <span class="l" data-l="ar">ابدأ بالخطة التي تناسب صالتك اليوم.</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-final-section">
+  <div class="container">
+    <div class="card" style="text-align:center; padding:48px 32px;">
+      <h2 style="font-family:var(--font-display); font-size:clamp(1.8rem,4vw,3rem); letter-spacing:-0.04em; margin-bottom:12px;">
+        <span class="l on" data-l="en">In 7 days, you'll never go back<br/>to the manual system.</span>
+        <span class="l" data-l="fr">Dans 7 jours, tu ne reviendras<br/>jamais au système manuel.</span>
+        <span class="l" data-l="ar">في 7 أيام، لن تعود أبدًا<br/>إلى النظام اليدوي.</span>
+      </h2>
+      <p style="color:var(--muted); margin-bottom:28px;">
+        <span class="l on" data-l="en">Stop losing time and money. Start managing your lounge the smart way.</span>
+        <span class="l" data-l="fr">Arrête de perdre du temps et de l'argent. Gère ta salle intelligemment.</span>
+        <span class="l" data-l="ar">توقف عن خسارة الوقت والمال. أدر صالتك بطريقة ذكية.</span>
+      </p>
+      <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+        <a href="trial.html" class="btn btn-primary">
+          <span class="l on" data-l="en">Start your free trial</span>
+          <span class="l" data-l="fr">Commencer l'essai gratuit</span>
+          <span class="l" data-l="ar">ابدأ تجربتك المجانية</span>
+        </a>
+      </div>
+      <div style="margin-top:14px; color:var(--muted); font-size:0.85rem;">
+        <span class="l on" data-l="en">7 days free · No credit card · No commitment</span>
+        <span class="l" data-l="fr">7 jours gratuits · Sans carte · Sans engagement</span>
+        <span class="l" data-l="ar">7 أيام مجانية · بدون بطاقة · بدون التزام</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUESTIONS -->
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="card" style="text-align:center; padding:32px;">
+      <h2 style="font-family:var(--font-display); font-size:clamp(1.6rem,3vw,2.2rem); letter-spacing:-0.03em; margin-bottom:10px;">
+        <span class="l on" data-l="en">Still have questions?</span>
+        <span class="l" data-l="fr">Des questions?</span>
+        <span class="l" data-l="ar">لديك أسئلة؟</span>
+      </h2>
+      <p style="color:var(--muted); margin-bottom:22px;">
+        <span class="l on" data-l="en">We're here to help you.</span>
+        <span class="l" data-l="fr">Nous sommes là pour vous aider.</span>
+        <span class="l" data-l="ar">نحن هنا لمساعدتك.</span>
+      </p>
+      <a href="#" class="btn btn-wa" id="waBtn2">
+        💬 <span class="l on" data-l="en">Contact us on WhatsApp</span><span class="l" data-l="fr">Contactez-nous sur WhatsApp</span><span class="l" data-l="ar">تواصل معنا على WhatsApp</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo"><div class="logo-mark"></div>ArenaMudir</div>
+    <p>© 2026 ArenaMudir</p>
+    <a href="portal.html">
+      <span class="l on" data-l="en">Client portal →</span>
+      <span class="l" data-l="fr">Espace client →</span>
+      <span class="l" data-l="ar">بوابة العميل ←</span>
+    </a>
+  </div>
+</footer>
+
+<script>
+// ── WHATSAPP (encoded) ──
+var _w = ['+', '2', '1', '6', '2', '6', '3', '4', '9', '6', '4', '9'].join('');
+document.getElementById('waBtn').href = 'https://wa.me/' + _w.replace('+','');
+document.getElementById('waBtn2').href = 'https://wa.me/' + _w.replace('+','');
+
+// ── LANG ──
+var lang = localStorage.getItem('am_lang') || 'en';
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('am_lang', l);
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('.l').forEach(function(el) {
+    el.classList.toggle('on', el.getAttribute('data-l') === l);
+  });
+
+  // Update flag in trigger
+  var flags = { en: '🇬🇧', fr: '🇫🇷', ar: '🇸🇦' };
+  var flagEl = document.getElementById('langFlag');
+  if (flagEl) flagEl.textContent = flags[l];
+
+  // Update active option
+  document.querySelectorAll('.lang-opt').forEach(function(opt) {
+    opt.classList.toggle('active', opt.getAttribute('data-flag') === flags[l]);
+  });
+
+  // Close dropdown
+  var wrap = document.getElementById('langWrap');
+  if (wrap) wrap.classList.remove('open');
+}
+
+function toggleLangMenu() {
+  document.getElementById('langWrap').classList.toggle('open');
+}
+
+// Close on outside click
+document.addEventListener('click', function(e) {
+  var wrap = document.getElementById('langWrap');
+  if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+});
+
+setLang(lang);
+
+// ── MOBILE NAV ──
+function toggleMobile() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
+document.addEventListener('click', function(e) {
+  var m = document.getElementById('mobileMenu');
+  var h = document.getElementById('ham');
+  if (!m.contains(e.target) && !h.contains(e.target)) m.classList.remove('open');
+});
+
+// ── SCROLL ANIMATIONS ──
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>
