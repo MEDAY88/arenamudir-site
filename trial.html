@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request a Trial — ArenaMudir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-1: #040816;
+      --bg-2: #0b1224;
+      --line: rgba(255,255,255,0.08);
+      --line-strong: rgba(99,102,241,0.28);
+      --text: #f8fbff;
+      --muted: #97a4bd;
+      --primary: #6d7cff;
+      --accent: #a855f7;
+      --secondary: #30d5ff;
+      --shadow: 0 24px 80px rgba(0,0,0,0.45);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1180px;
+      --font-display: 'Bricolage Grotesque', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(109,124,255,0.16), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(48,213,255,0.12), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(168,85,247,0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+
+    /* ── NAV ── */
+    .header {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(4,8,22,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 16px 0;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      font-family: var(--font-display); font-weight: 800;
+      letter-spacing: -0.03em; font-size: 1.1rem;
+    }
+    .logo-mark {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 24px rgba(109,124,255,0.75); flex-shrink: 0;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); font-size: 0.9rem; font-weight: 600;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: white; }
+
+    /* ── LANG ── */
+    .lang-switch {
+      display: flex; align-items: center; gap: 2px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 40px; padding: 3px;
+    }
+    .lang-btn {
+      padding: 4px 12px; font-size: 12px; font-weight: 700;
+      border-radius: 40px; border: none; background: none;
+      cursor: pointer; color: var(--muted); transition: all 0.2s;
+      font-family: var(--font-body);
+    }
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white; box-shadow: 0 4px 12px rgba(109,124,255,0.3);
+    }
+    .lang-btn:not(.active):hover { color: white; }
+
+    /* ── LAYOUT ── */
+    .trial { padding: 52px 0 90px; }
+    .trial-wrap {
+      display: grid; grid-template-columns: 0.9fr 1.1fr;
+      gap: 48px; align-items: start;
+    }
+    .trial-copy { padding-top: 8px; }
+    .trial-copy h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 1.05; letter-spacing: -0.04em;
+      margin-bottom: 16px;
+    }
+    .trial-copy h1 .accent {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .trial-copy p {
+      color: var(--muted); font-size: 1.05rem;
+      max-width: 380px; margin-bottom: 28px; line-height: 1.65;
+    }
+    .trust-list { display: flex; flex-direction: column; gap: 10px; }
+    .trust-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.9rem; color: var(--muted);
+    }
+    .trust-icon {
+      width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(109,124,255,0.12); border: 1px solid rgba(109,124,255,0.2);
+      display: flex; align-items: center; justify-content: center; font-size: 13px;
+    }
+
+    /* ── FORM CARD ── */
+    .trial-card {
+      background: linear-gradient(180deg, rgba(13,20,38,0.80), rgba(9,14,28,0.90));
+      border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-xl);
+      padding: 32px; box-shadow: var(--shadow); backdrop-filter: blur(14px);
+      position: relative; overflow: hidden;
+    }
+    .trial-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(109,124,255,0.05), transparent 40%, rgba(48,213,255,0.04));
+      pointer-events: none;
+    }
+    .form-inner { position: relative; z-index: 1; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── FIELDS ── */
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label {
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      letter-spacing: 0.3px; text-transform: uppercase;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md); font-size: 15px;
+      color: var(--text); font-family: var(--font-body);
+      outline: none; transition: all 0.2s; appearance: none;
+    }
+    .field input::placeholder, .field textarea::placeholder { color: rgba(151,164,189,0.4); }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: rgba(109,124,255,0.6);
+      background: rgba(109,124,255,0.06);
+      box-shadow: 0 0 0 3px rgba(109,124,255,0.12);
+    }
+    .field select option { background: #0b1224; color: var(--text); }
+    .field textarea { min-height: 100px; resize: vertical; }
+
+    .phone-row { display: grid; grid-template-columns: 160px 1fr; gap: 10px; }
+
+    /* ── RADIO ── */
+    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; padding-top: 2px; }
+    .radio-option {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer; font-size: 14px; font-weight: 500; color: var(--muted);
+      transition: all 0.15s; flex: 1; min-width: 100px;
+    }
+    .radio-option:hover { border-color: rgba(109,124,255,0.3); color: var(--text); }
+    .radio-option input { display: none; }
+    .radio-dot {
+      width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.2); transition: all 0.15s;
+    }
+    .radio-option input:checked ~ .radio-dot {
+      border-color: var(--primary); background: var(--primary);
+      box-shadow: 0 0 8px rgba(109,124,255,0.5);
+    }
+    .radio-option:has(input:checked) {
+      border-color: rgba(109,124,255,0.4); background: rgba(109,124,255,0.08); color: white;
+    }
+
+    /* ── SUBMIT ── */
+    .submit-btn {
+      width: 100%; border: none; border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white; padding: 18px; font-size: 17px; font-weight: 800;
+      font-family: var(--font-display); cursor: pointer; margin-top: 8px;
+      letter-spacing: -0.3px; transition: all 0.2s;
+      box-shadow: 0 14px 40px rgba(109,124,255,0.3);
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 50px rgba(109,124,255,0.4); }
+    .submit-btn:active { transform: translateY(0); }
+    .trial-note { text-align: center; color: var(--muted); font-size: 12px; margin-top: 14px; line-height: 1.6; }
+
+    /* ── SUCCESS ── */
+    .success-state {
+      display: none; text-align: center; padding: 40px 20px;
+    }
+    .success-state .success-icon { font-size: 52px; margin-bottom: 16px; }
+    .success-state h2 {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px;
+    }
+    .success-state p { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+
+    /* ── LANG ── */
+    .l { display: none; }
+    .l.on { display: inherit; }
+    span.l.on { display: inline; }
+    p.l.on, div.l.on, h1.l.on, h2.l.on, h3.l.on, label.l.on { display: block; }
+    option.l.on { display: block; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .trial-wrap { grid-template-columns: 1fr; gap: 32px; }
+      .trial-copy p { max-width: 100%; }
+    }
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .phone-row { grid-template-columns: 1fr; }
+      .radio-group { flex-direction: column; }
+      .trial-card { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="header">
+  <div class="container nav">
+    <div class="logo"><div class="logo-mark"></div>ArenaMudir</div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="lang-switch">
+        <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+        <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
+        <button class="lang-btn" onclick="setLang('ar')">🇹🇳 ع</button>
+      </div>
+      <a href="index.html" class="back-link">
+        ← <span class="l on" data-l="en">Back</span><span class="l" data-l="fr">Retour</span><span class="l" data-l="ar">رجوع</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- TRIAL SECTION -->
+<section class="trial">
+  <div class="container">
+    <div class="trial-wrap">
+
+      <!-- LEFT COPY -->
+      <div class="trial-copy">
+        <h1>
+          <span class="l on" data-l="en">Request your<br/><span class="accent">free trial</span></span>
+          <span class="l" data-l="fr">Demandez votre<br/><span class="accent">essai gratuit</span></span>
+          <span class="l" data-l="ar">اطلب<br/><span class="accent">تجربتك المجانية</span></span>
+        </h1>
+        <p>
+          <span class="l on" data-l="en">Fill out the form and we will help you start ArenaMudir for your PS/Xbox lounge.</span>
+          <span class="l" data-l="fr">Remplissez le formulaire et nous vous aidons à démarrer ArenaMudir pour votre salle.</span>
+          <span class="l" data-l="ar">املأ النموذج وسنساعدك على بدء ArenaMudir لصالتك.</span>
+        </p>
+        <div class="trust-list">
+          <div class="trust-item">
+            <div class="trust-icon">🚀</div>
+            <span class="l on" data-l="en">7-day free trial, no credit card needed</span>
+            <span class="l" data-l="fr">7 jours gratuits, sans carte bancaire</span>
+            <span class="l" data-l="ar">7 أيام مجانية، بدون بطاقة بنكية</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">⚡</div>
+            <span class="l on" data-l="en">Setup in less than 15 minutes</span>
+            <span class="l" data-l="fr">Installation en moins de 15 minutes</span>
+            <span class="l" data-l="ar">إعداد في أقل من 15 دقيقة</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">💬</div>
+            <span class="l on" data-l="en">24/7 support via WhatsApp</span>
+            <span class="l" data-l="fr">Support 24/7 via WhatsApp</span>
+            <span class="l" data-l="ar">دعم 24/7 عبر WhatsApp</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">📶</div>
+            <span class="l on" data-l="en">Works offline — no stable internet needed</span>
+            <span class="l" data-l="fr">Fonctionne hors ligne — pas besoin d'internet stable</span>
+            <span class="l" data-l="ar">يعمل بدون إنترنت — لا حاجة لاتصال مستقر</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🔒</div>
+            <span class="l on" data-l="en">Your info stays private — WhatsApp contact only</span>
+            <span class="l" data-l="fr">Vos infos restent privées — contact uniquement via WhatsApp</span>
+            <span class="l" data-l="ar">معلوماتك خاصة — تواصل عبر WhatsApp فقط</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT FORM -->
+      <div class="trial-card">
+        <div class="form-inner" id="formInner">
+          <div class="form-grid">
+
+            <div class="field">
+              <label>
+                <span class="l on" data-l="en">Full name *</span>
+                <span class="l" data-l="fr">Nom complet *</span>
+                <span class="l" data-l="ar">الاسم الكامل *</span>
+              </label>
+              <input type="text" id="tf-name"
+                placeholder="Ahmed Ben Ali"/>
+            </div>
+
+            <div class="field">
+              <label>
+                <span class="l on" data-l="en">Lounge / business name *</span>
+                <span class="l" data-l="fr">Nom de votre salle *</span>
+                <span class="l" data-l="ar">اسم الصالة *</span>
+              </label>
+              <input type="text" id="tf-lounge"
+                placeholder="PS Lounge Tunis"/>
+            </div>
+
+            <div class="field full">
+              <label>WhatsApp *</label>
+              <div class="phone-row">
+                <select id="tf-cc">
+                  <option value="+216">🇹🇳 +216</option>
+                  <option value="+213">🇩🇿 +213</option>
+                  <option value="+20">🇪🇬 +20</option>
+                  <option value="+212">🇲🇦 +212</option>
+                  <option value="+218">🇱🇾 +218</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                </select>
+                <input type="tel" id="tf-phone" placeholder="22 123 456"/>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label>
+                <span class="l on" data-l="en">Email *</span>
+                <span class="l" data-l="fr">Email *</span>
+                <span class="l" data-l="ar">البريد الإلكتروني *</span>
+              </label>
+              <input type="email" id="tf-email" placeholder="name@domain.com"/>
+            </div>
+
+            <div class="field">
+              <label>
+                <span class="l on" data-l="en">Country *</span>
+                <span class="l" data-l="fr">Pays *</span>
+                <span class="l" data-l="ar">البلد *</span>
+              </label>
+              <select id="tf-country">
+                <option value="">—</option>
+                <option>🇹🇳 Tunisia</option>
+                <option>🇩🇿 Algeria</option>
+                <option>🇪🇬 Egypt</option>
+                <option>🇲🇦 Morocco</option>
+                <option>🇱🇾 Libya</option>
+                <option>🌍 Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>
+                <span class="l on" data-l="en">Number of stations *</span>
+                <span class="l" data-l="fr">Nombre de stations *</span>
+                <span class="l" data-l="ar">عدد المحطات *</span>
+              </label>
+              <select id="tf-stations">
+                <option value="">—</option>
+                <option>1 – 5</option>
+                <option>6 – 10</option>
+                <option>11 – 20</option>
+                <option>20+</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label>
+                <span class="l on" data-l="en">Do you use Android TV? *</span>
+                <span class="l" data-l="fr">Utilisez-vous des Android TV? *</span>
+                <span class="l" data-l="ar">هل تستخدم Android TV؟ *</span>
+              </label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="androidtv" value="yes"/>
+                  <div class="radio-dot"></div>
+                  <span class="l on" data-l="en">Yes</span><span class="l" data-l="fr">Oui</span><span class="l" data-l="ar">نعم</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="androidtv" value="no"/>
+                  <div class="radio-dot"></div>
+                  <span class="l on" data-l="en">No</span><span class="l" data-l="fr">Non</span><span class="l" data-l="ar">لا</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="androidtv" value="unsure"/>
+                  <div class="radio-dot"></div>
+                  <span class="l on" data-l="en">Not sure</span><span class="l" data-l="fr">Je ne sais pas</span><span class="l" data-l="ar">لست متأكدًا</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label>
+                <span class="l on" data-l="en">Plan interested in *</span>
+                <span class="l" data-l="fr">Plan qui vous intéresse *</span>
+                <span class="l" data-l="ar">الخطة التي تهمك *</span>
+              </label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="plan" value="local"/>
+                  <div class="radio-dot"></div>
+                  Local — $20/<span class="l on" data-l="en">mo</span><span class="l" data-l="fr">mois</span><span class="l" data-l="ar">شهر</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="plan" value="remote"/>
+                  <div class="radio-dot"></div>
+                  Remote — $35/<span class="l on" data-l="en">mo</span><span class="l" data-l="fr">mois</span><span class="l" data-l="ar">شهر</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="plan" value="unsure"/>
+                  <div class="radio-dot"></div>
+                  <span class="l on" data-l="en">Not sure yet</span><span class="l" data-l="fr">Pas encore décidé</span><span class="l" data-l="ar">لست متأكدًا بعد</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label>
+                <span class="l on" data-l="en">Additional details</span>
+                <span class="l" data-l="fr">Détails supplémentaires</span>
+                <span class="l" data-l="ar">تفاصيل إضافية</span>
+                <span style="color:rgba(151,164,189,0.4); font-weight:400; text-transform:none;">
+                  (<span class="l on" data-l="en">optional</span><span class="l" data-l="fr">optionnel</span><span class="l" data-l="ar">اختياري</span>)
+                </span>
+              </label>
+              <textarea id="tf-details"
+                placeholder="..."></textarea>
+            </div>
+
+          </div>
+
+          <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+            <span class="l on" data-l="en">🚀 Start Free Trial</span>
+            <span class="l" data-l="fr">🚀 Démarrer l'essai gratuit</span>
+            <span class="l" data-l="ar">🚀 ابدأ التجربة المجانية</span>
+          </button>
+
+          <p class="trial-note">
+            <span class="l on" data-l="en">🔒 Your information stays private. We contact you via WhatsApp only.</span>
+            <span class="l" data-l="fr">🔒 Vos informations restent privées. Nous vous contactons uniquement via WhatsApp.</span>
+            <span class="l" data-l="ar">🔒 معلوماتك خاصة. نتواصل معك عبر WhatsApp فقط.</span>
+          </p>
+        </div>
+
+        <!-- SUCCESS STATE -->
+        <div class="success-state" id="successState">
+          <div class="success-icon">🎉</div>
+          <h2>
+            <span class="l on" data-l="en">Request sent!</span>
+            <span class="l" data-l="fr">Demande envoyée!</span>
+            <span class="l" data-l="ar">تم إرسال الطلب!</span>
+          </h2>
+          <p>
+            <span class="l on" data-l="en">We'll contact you on WhatsApp within 24 hours. Get ready to level up your lounge! 🚀</span>
+            <span class="l" data-l="fr">Nous vous contacterons sur WhatsApp dans les 24 heures. Préparez-vous à passer au niveau supérieur! 🚀</span>
+            <span class="l" data-l="ar">سنتواصل معك على WhatsApp خلال 24 ساعة. استعد للارتقاء بصالتك! 🚀</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+// ── WHATSAPP (encoded) ──
+var _w = ['+','2','1','6','2','6','3','4','9','6','4','9'].join('');
+var _e = ['b','e','n','f','a','r','h','a','t','.','m','a','@','g','m','a','i','l','.','c','o','m'].join('');
+
+// ── LANG ──
+var lang = localStorage.getItem('am_lang') || 'en';
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('am_lang', l);
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('.l').forEach(function(el) {
+    el.classList.toggle('on', el.getAttribute('data-l') === l);
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(btn, i) {
+    btn.classList.toggle('active', ['en','fr','ar'][i] === l);
+  });
+}
+
+setLang(lang);
+
+// ── FORM SUBMIT ──
+function submitForm() {
+  var name     = document.getElementById('tf-name').value.trim();
+  var lounge   = document.getElementById('tf-lounge').value.trim();
+  var cc       = document.getElementById('tf-cc').value;
+  var phone    = document.getElementById('tf-phone').value.trim();
+  var email    = document.getElementById('tf-email').value.trim();
+  var country  = document.getElementById('tf-country').value;
+  var stations = document.getElementById('tf-stations').value;
+  var androidtv = document.querySelector('input[name="androidtv"]:checked');
+  var plan     = document.querySelector('input[name="plan"]:checked');
+  var details  = document.getElementById('tf-details').value.trim();
+
+  if (!name || !lounge || !phone || !email || !country || !stations) {
+    alert(
+      lang === 'fr' ? 'Veuillez remplir tous les champs obligatoires.' :
+      lang === 'ar' ? 'يرجى ملء جميع الحقول الإلزامية.' :
+      'Please fill in all required fields.'
+    );
+    return;
+  }
+
+  // Build WhatsApp message
+  var msg = 'Hello ArenaMudir! Trial request:\n' +
+    'Name: ' + name + '\n' +
+    'Lounge: ' + lounge + '\n' +
+    'Phone: ' + cc + phone + '\n' +
+    'Email: ' + email + '\n' +
+    'Country: ' + country + '\n' +
+    'Stations: ' + stations + '\n' +
+    'Android TV: ' + (androidtv ? androidtv.value : '?') + '\n' +
+    'Plan: ' + (plan ? plan.value : '?') +
+    (details ? '\nDetails: ' + details : '');
+
+  // Open WhatsApp
+  window.open('https://wa.me/' + _w.replace('+','') + '?text=' + encodeURIComponent(msg), '_blank');
+
+  // Show success
+  document.getElementById('formInner').style.display = 'none';
+  document.getElementById('successState').style.display = 'block';
+}
+</script>
+</body>
+</html>
