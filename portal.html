@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ArenaMudir — Espace Client</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+/* LANG */
+.l { display: none; }
+.l.on { display: inherit; }
+span.l.on { display: inline; }
+div.l.on, p.l.on { display: block; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #070709; --surface: #0E0E14; --surface2: #16161F;
+  --border: #1E1E2A; --text1: #F2F2FF; --text2: #7070A0; --text3: #2A2A38;
+  --accent: #4F6EF7; --accent2: #00E5B0; --green: #00E676; --red: #FF1744;
+}
+html, body { height: 100%; }
+body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text1); }
+.screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; display: none; }
+.screen.active { display: flex; }
+.box { width: 100%; max-width: 420px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px 32px; text-align: center; }
+.box-logo { font-size: 36px; margin-bottom: 8px; }
+.box-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.box-sub { font-size: 13px; color: var(--text2); margin-bottom: 28px; }
+.form-group { margin-bottom: 14px; text-align: left; }
+.form-group label { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 0.5px; display: block; margin-bottom: 6px; text-transform: uppercase; }
+.form-input { width: 100%; padding: 12px 14px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text1); font-size: 14px; font-family: 'Syne', sans-serif; outline: none; transition: border-color 0.15s; }
+.form-input:focus { border-color: var(--accent); }
+.btn-submit { width: 100%; padding: 13px; background: var(--accent); border: none; border-radius: 10px; color: white; font-size: 15px; font-weight: 700; font-family: 'Syne', sans-serif; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+.btn-submit:hover { background: #6B86FF; }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.form-error { font-size: 13px; color: var(--red); margin-top: 10px; min-height: 18px; }
+.box-footer { margin-top: 20px; font-size: 13px; color: var(--text2); }
+.box-footer a { color: var(--accent); text-decoration: none; }
+.expired-icon { font-size: 44px; margin-bottom: 14px; }
+.expired-title { font-size: 20px; font-weight: 800; color: var(--red); margin-bottom: 8px; }
+.expired-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; line-height: 1.6; }
+.btn-email { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--accent); color: white; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.btn-ghost { background: none; border: none; color: var(--text2); font-size: 13px; cursor: pointer; font-family: 'Syne', sans-serif; margin-top: 8px; display: block; margin: 8px auto 0; }
+.portal { display: none; flex-direction: column; min-height: 100vh; }
+.portal.active { display: flex; }
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 50; }
+.topbar-brand { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.topbar-brand span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.topbar-lounge { font-size: 12px; color: var(--text2); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lounge-pill { display: flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; white-space: nowrap; }
+.lounge-pill.online { background: rgba(0,230,118,0.1); color: var(--green); border: 1px solid rgba(0,230,118,0.2); }
+.lounge-pill.offline { background: rgba(255,23,68,0.1); color: var(--red); border: 1px solid rgba(255,23,68,0.2); }
+.lounge-pill.unknown { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+.dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.dot.online { background: var(--green); }
+.dot.offline { background: var(--red); }
+.dot.unknown { background: var(--text3); }
+.plan-badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+.plan-badge.local { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+.plan-badge.remote { background: rgba(79,110,247,0.15); color: var(--accent); border: 1px solid rgba(79,110,247,0.3); }
+.btn-logout { padding: 6px 14px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text2); font-size: 12px; font-family: 'Syne', sans-serif; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+.btn-logout:hover { border-color: var(--red); color: var(--red); }
+.tabs { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s; flex-shrink: 0; }
+.tab:hover { color: var(--text1); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.content { padding: 20px 16px; max-width: 960px; margin: 0 auto; width: 100%; flex: 1; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); margin-bottom: 8px; }
+.stat-value { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 600; line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+.card-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); margin-bottom: 16px; }
+.sub-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.sub-label { font-size: 10px; color: var(--text2); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+.sub-value { font-size: 14px; font-weight: 700; }
+.history-item { display: grid; grid-template-columns: 52px 72px 1fr 80px; align-items: center; gap: 12px; padding: 11px 14px; background: var(--surface); border-radius: 10px; font-size: 13px; margin-bottom: 6px; border: 1px solid var(--border); }
+.h-station { font-weight: 700; color: var(--accent); font-size: 12px; }
+.h-time { font-family: 'DM Mono', monospace; color: var(--text2); font-size: 11px; }
+.h-price { font-family: 'DM Mono', monospace; font-weight: 700; color: var(--green); text-align: right; font-size: 12px; }
+.live-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; gap: 12px; }
+.live-status { display: flex; align-items: center; gap: 8px; font-size: 13px; min-width: 0; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--text3); }
+.live-dot.on { background: var(--green); box-shadow: 0 0 5px var(--green); animation: blink 2s infinite; }
+.live-dot.off { background: var(--red); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.btn-refresh { padding: 8px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text1); font-size: 12px; font-weight: 600; font-family: 'Syne', sans-serif; cursor: pointer; white-space: nowrap; transition: all 0.2s; flex-shrink: 0; }
+.btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
+.station-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 10px; }
+.station-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
+.station-card.active { border-color: var(--accent); background: rgba(79,110,247,0.05); }
+.s-name { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.s-timer { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; color: var(--accent2); margin-bottom: 4px; }
+.s-label { font-size: 10px; color: var(--text2); }
+.tunnel-box { background: var(--surface2); border: 1px solid rgba(255,152,0,0.2); border-radius: 12px; padding: 18px; margin-bottom: 16px; display: none; }
+.tunnel-box h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #FF9800; }
+.tunnel-box p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.ranking-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.ranking-row:last-child { border: none; }
+.r-pos { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--text3); width: 24px; flex-shrink: 0; }
+.r-name { font-weight: 600; flex: 1; font-size: 13px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.r-bar-wrap { flex: 2; background: var(--surface2); border-radius: 3px; height: 5px; }
+.r-bar { height: 5px; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s; }
+.r-amount { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent2); width: 70px; text-align: right; flex-shrink: 0; }
+.empty { text-align: center; padding: 40px 16px; color: var(--text2); }
+.empty-icon { font-size: 32px; margin-bottom: 10px; }
+.empty p { font-size: 13px; line-height: 1.6; }
+.error-bar { display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; background: rgba(255,23,68,0.07); border: 1px solid rgba(255,23,68,0.2); border-radius: 10px; font-size: 13px; color: var(--red); margin-bottom: 14px; }
+.plang-opt { padding:8px 12px; border-radius:8px; cursor:pointer; font-size:18px; text-align:center; transition:background 0.15s; }
+.plang-opt:hover { background:var(--surface2); }
+.plang-opt.active { background:rgba(79,110,247,0.2); }
+@media (max-width: 640px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .sub-grid { grid-template-columns: 1fr 1fr; }
+  .topbar-lounge { display: none; }
+  .history-item { grid-template-columns: 48px 1fr 70px; }
+  .h-time { display: none; }
+  .content { padding: 16px 12px; }
+}
+@media (max-width: 380px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-value { font-size: 20px; }
+  .station-grid { grid-template-columns: 1fr 1fr; }
+  .plan-badge { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="screen active" id="loginScreen">
+  <div class="box">
+    <div class="box-logo">🎮</div>
+    <div class="box-title">ArenaMudir</div>
+    <div class="box-sub">Espace client — Connectez-vous</div>
+    <div class="form-group">
+      <label for="loginEmail">Email</label>
+      <input type="email" class="form-input" id="loginEmail" placeholder="votre@email.com"/>
+    </div>
+    <div class="form-group">
+      <label for="loginPassword">Mot de passe</label>
+      <input type="password" class="form-input" id="loginPassword" placeholder="••••••••"/>
+    </div>
+    <div class="form-error" id="loginError"></div>
+    <button class="btn-submit" id="btnLogin">Se connecter</button>
+    <div class="box-footer">Pas encore client? <a href="index.html">Voir nos plans</a></div>
+  </div>
+</div>
+
+<div class="screen" id="expiredScreen">
+  <div class="box" style="border-color:rgba(255,23,68,0.3);">
+    <div class="expired-icon">⏰</div>
+    <div class="expired-title">Abonnement expiré</div>
+    <div class="expired-sub">Votre abonnement a expiré. Contactez-nous pour le renouveler.</div>
+    <a href="#" class="btn-email" id="btnRenew">📧 Renouveler</a>
+    <button class="btn-ghost" id="btnLogoutExpired">Déconnexion</button>
+  </div>
+</div>
+
+<div class="portal" id="portal">
+  <div class="topbar">
+    <div class="topbar-brand">🎮 <span>ArenaMudir</span></div>
+    <div class="topbar-lounge" id="topbarLounge"></div>
+    <div class="lounge-pill unknown" id="loungePill">
+      <div class="dot unknown" id="loungeDot"></div>
+      <span id="loungeStatusText">—</span>
+    </div>
+    <div class="plan-badge local" id="planBadge">—</div>
+    <div style="position:relative;" id="portalLangWrap">
+      <button id="portalLangBtn" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:16px;color:var(--text1);">🇬🇧 <span style="font-size:10px;">▾</span></button>
+      <div id="portalLangDrop" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div class="plang-opt" onclick="setPortalLang('en')" data-flag="🇬🇧">🇬🇧</div>
+        <div class="plang-opt" onclick="setPortalLang('fr')" data-flag="🇫🇷">🇫🇷</div>
+        <div class="plang-opt" onclick="setPortalLang('ar')" data-flag="🇸🇦">🇸🇦</div>
+      </div>
+    </div>
+    <button class="btn-logout" id="btnLogout">⏻</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-overview">📊 <span class="l on" data-l="fr">Vue d'ensemble</span><span class="l" data-l="en">Overview</span><span class="l" data-l="ar">نظرة عامة</span></div>
+    <div class="tab" id="tab-live" style="display:none;">🔴 <span class="l on" data-l="fr">En direct</span><span class="l" data-l="en">Live</span><span class="l" data-l="ar">مباشر</span></div>
+    <div class="tab" id="tab-history">📋 <span class="l on" data-l="fr">Historique</span><span class="l" data-l="en">History</span><span class="l" data-l="ar">السجل</span></div>
+    <div class="tab" id="tab-subscription">🔑 <span class="l on" data-l="fr">Abonnement</span><span class="l" data-l="en">Subscription</span><span class="l" data-l="ar">الاشتراك</span></div>
+  </div>
+
+  <div class="content">
+
+    <div class="tab-panel active" id="panel-overview">
+      <div id="overviewError"></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Aujourd'hui</div><div class="stat-value" id="revToday" style="color:var(--accent2)">—</div><div class="stat-sub">TND</div></div>
+        <div class="stat-card"><div class="stat-label">Sessions</div><div class="stat-value" id="sessToday">—</div><div class="stat-sub">aujourd'hui</div></div>
+        <div class="stat-card"><div class="stat-label">Semaine</div><div class="stat-value" id="revWeek" style="color:var(--accent)">—</div><div class="stat-sub">TND</div></div>
+        <div class="stat-card"><div class="stat-label">Sessions</div><div class="stat-value" id="sessWeek">—</div><div class="stat-sub">semaine</div></div>
+      </div>
+      <div class="card"><div class="card-title">🏆 Classement des stations</div><div id="rankingList"><div class="empty"><div class="empty-icon">📊</div><p>Chargement...</p></div></div></div>
+      <div class="card"><div class="card-title">📋 Sessions aujourd'hui</div><div id="todayList"><div class="empty"><div class="empty-icon">📋</div><p>Chargement...</p></div></div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-live">
+      <div id="liveError"></div>
+      <div class="live-bar">
+        <div class="live-status"><div class="live-dot" id="liveDot"></div><span id="liveStatusText" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Connexion...</span></div>
+        <button class="btn-refresh" id="btnRefresh">🔄 Actualiser</button>
+      </div>
+      <div class="tunnel-box" id="tunnelManual">
+        <h4>⚠️ Lounge non configuré</h4>
+        <p>L'accès à distance n'est pas encore disponible. Contactez ArenaMudir pour configurer votre connexion.</p>
+      </div>
+      <div class="station-grid" id="liveGrid"><div class="empty" style="grid-column:1/-1"><div class="empty-icon">📺</div><p>Chargement...</p></div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-history">
+      <div id="historyError"></div>
+      <div id="historyList"><div class="empty"><div class="empty-icon">📋</div><p>Chargement...</p></div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-subscription">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <div style="font-size:16px;font-weight:800;">Mon abonnement</div>
+          <div style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;background:rgba(0,230,118,0.1);color:var(--green);border:1px solid rgba(0,230,118,0.2);">Actif</div>
+        </div>
+        <div class="sub-grid">
+          <div><div class="sub-label">Plan</div><div class="sub-value" id="subPlan">—</div></div>
+          <div><div class="sub-label">Lounge</div><div class="sub-value" id="subLounge">—</div></div>
+          <div><div class="sub-label">Expire le</div><div class="sub-value" id="subExpiry">—</div></div>
+          <div><div class="sub-label">Stations</div><div class="sub-value" id="subStations">—</div></div>
+          <div><div class="sub-label">Device ID</div><div class="sub-value" style="font-family:'DM Mono',monospace;font-size:12px;" id="subDevice">—</div></div>
+          <div><div class="sub-label">Dernière sync</div><div class="sub-value" style="font-size:12px;" id="subLastSeen">—</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Renouveler ou changer de plan</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6;">Contactez-nous pour renouveler votre abonnement.</p>
+        <a href="#" id="btnContact" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--accent);color:white;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;">📧 Contacter ArenaMudir</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="portal.js">
+// ── PORTAL LANG ──
+var portalLang = localStorage.getItem('am_lang') || 'fr';
+
+function setPortalLang(l) {
+  portalLang = l;
+  localStorage.setItem('am_lang', l);
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('.l').forEach(function(el) {
+    el.classList.toggle('on', el.getAttribute('data-l') === l);
+  });
+  var flags = { en: '🇬🇧', fr: '🇫🇷', ar: '🇸🇦' };
+  var btn = document.getElementById('portalLangBtn');
+  if (btn) btn.innerHTML = flags[l] + ' <span style="font-size:10px;">▾</span>';
+  document.querySelectorAll('.plang-opt').forEach(function(o) {
+    o.classList.toggle('active', o.getAttribute('data-flag') === flags[l]);
+  });
+  document.getElementById('portalLangDrop').style.display = 'none';
+}
+
+document.getElementById('portalLangBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  var d = document.getElementById('portalLangDrop');
+  d.style.display = d.style.display === 'none' ? 'block' : 'none';
+});
+document.addEventListener('click', function() {
+  var d = document.getElementById('portalLangDrop');
+  if (d) d.style.display = 'none';
+});
+
+// Init lang AFTER DOM ready — synced from landing page via localStorage
+document.addEventListener('DOMContentLoaded', function() {
+  setPortalLang(portalLang);
+});
+</script>
+</body>
+</html>
