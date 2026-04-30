@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Téléchargez ArenaMudir Pro — Logiciel de gestion pour salons de jeux PS / Xbox.">
+<title>Télécharger ArenaMudir Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: #080c14;
+  --surface: #0d1117;
+  --surface2: #172540;
+  --border: rgba(99,140,210,0.20);
+  --border2: rgba(99,140,210,0.45);
+  --text1: #f1f5f9;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --green: #10b981;
+  --orange: #f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background: var(--bg);
+  color: var(--text1);
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+/* Subtle gradient background */
+body::before{
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(59,130,246,0.07) 0%, transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(167,139,250,0.05) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.topbar{
+  background: linear-gradient(180deg, #1d2c43 0%, #101a2a 100%);
+  border-bottom: 1px solid var(--border2);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand{
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--text1);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brand-dot{
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(16,185,129,0.6);
+}
+.topbar-links a{
+  color: var(--text2);
+  text-decoration: none;
+  margin-left: 22px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color .15s;
+}
+.topbar-links a:hover{ color: var(--text1); }
+
+main{
+  flex: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 64px 28px 48px;
+  width: 100%;
+}
+
+.hero{
+  text-align: center;
+  margin-bottom: 56px;
+}
+.hero-eyebrow{
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(59,130,246,0.10);
+  border: 1px solid rgba(59,130,246,0.25);
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 18px;
+}
+.hero h1{
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.hero p{
+  font-size: 17px;
+  color: var(--text2);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.download-card{
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 32px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.download-card::before{
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent);
+}
+
+.dl-info{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.dl-meta{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dl-version{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text2);
+}
+.dl-platform{
+  font-size: 13px;
+  color: var(--text3);
+}
+
+.dl-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .15s;
+  box-shadow: 0 4px 18px rgba(59,130,246,0.25);
+}
+.dl-btn:hover{
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(59,130,246,0.35);
+}
+.dl-btn:active{ transform: translateY(0); }
+
+.dl-fileinfo{
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text3);
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.section-title{
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 36px 0 16px;
+}
+
+.steps{
+  display: grid;
+  gap: 12px;
+}
+.step{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.step-num{
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(59,130,246,0.12);
+  border: 1px solid rgba(59,130,246,0.30);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+}
+.step-content h3{
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.step-content p{
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.55;
+}
+.step-content code{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  background: rgba(99,140,210,0.10);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--text1);
+}
+
+.notice{
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+.notice-icon{
+  flex-shrink: 0;
+  font-size: 16px;
+  color: var(--orange);
+  margin-top: 1px;
+}
+.notice h4{
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--orange);
+}
+.notice p{
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.55;
+}
+
+.requirements{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 28px;
+}
+.req-item{
+  font-size: 13px;
+}
+.req-item .req-label{
+  color: var(--text3);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+.req-item .req-value{
+  color: var(--text1);
+  font-weight: 500;
+}
+
+.support{
+  text-align: center;
+  margin-top: 48px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.support h3{
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.support p{
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 14px;
+}
+.support-links{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.support-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  background: rgba(99,140,210,0.08);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text1);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .15s;
+}
+.support-link:hover{
+  border-color: var(--accent);
+  background: rgba(59,130,246,0.10);
+}
+
+footer{
+  text-align: center;
+  padding: 24px 28px 32px;
+  color: var(--text3);
+  font-size: 12px;
+}
+
+@media (max-width: 600px){
+  .hero h1{ font-size: 28px; }
+  .hero p{ font-size: 15px; }
+  .download-card{ padding: 22px; }
+  .requirements{ grid-template-columns: 1fr; }
+  main{ padding: 36px 20px 32px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="/" class="brand">
+    <span class="brand-dot"></span>
+    ArenaMudir
+  </a>
+  <div class="topbar-links">
+    <a href="/portal.html">Portail</a>
+    <a href="mailto:benfarhat.ma@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<main>
+
+  <div class="hero">
+    <span class="hero-eyebrow">Application Windows</span>
+    <h1>Télécharger ArenaMudir Pro</h1>
+    <p>Le logiciel professionnel de gestion pour salons de jeux. Installez en moins de 5&nbsp;minutes.</p>
+  </div>
+
+  <div class="download-card">
+    <div class="dl-info">
+      <div class="dl-meta">
+        <span class="dl-version">Version 0.1.0</span>
+        <span class="dl-platform">Windows&nbsp;10 / 11 · 64-bit</span>
+      </div>
+      <span style="font-size:12px;color:var(--green);font-weight:600;letter-spacing:.05em;">● DERNIÈRE VERSION</span>
+    </div>
+
+    <a href="https://github.com/MEDAY88/arenamudir-site/releases/download/V0.1.0/ArenaMudir_0.1.0_x64-setup.exe" class="dl-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Télécharger ArenaMudir Pro
+    </a>
+
+    <div class="dl-fileinfo">ArenaMudir_0.1.0_x64-setup.exe</div>
+  </div>
+
+  <div class="section-title">Configuration requise</div>
+  <div class="requirements">
+    <div class="req-item">
+      <div class="req-label">Système</div>
+      <div class="req-value">Windows 10 ou 11 (64-bit)</div>
+    </div>
+    <div class="req-item">
+      <div class="req-label">Mémoire</div>
+      <div class="req-value">4 Go RAM minimum</div>
+    </div>
+    <div class="req-item">
+      <div class="req-label">Espace disque</div>
+      <div class="req-value">200 Mo libre</div>
+    </div>
+    <div class="req-item">
+      <div class="req-label">Réseau</div>
+      <div class="req-value">Wi-Fi 2.4 / 5 GHz</div>
+    </div>
+  </div>
+
+  <div class="section-title">Installation</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Lancez l'installateur</h3>
+        <p>Double-cliquez sur le fichier <code>ArenaMudir_0.1.0_x64-setup.exe</code> téléchargé. L'assistant d'installation démarre.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Entrez votre clé de licence</h3>
+        <p>Au premier démarrage, saisissez la clé reçue par message&nbsp;: <code>AM-XXXX-XXXX-XXXX</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Configurez vos TVs</h3>
+        <p>Suivez l'assistant&nbsp;: nombre de stations, types, tarifs, et adresses IP des téléviseurs. C'est prêt&nbsp;!</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice">
+    <div class="notice-icon">⚠</div>
+    <div>
+      <h4>Avertissement Windows SmartScreen</h4>
+      <p>Lors du premier lancement, Windows peut afficher un avertissement de sécurité. Cliquez sur <strong>« Informations complémentaires »</strong> puis <strong>« Exécuter quand même »</strong>. C'est normal pour les applications récentes — la signature numérique sera ajoutée prochainement.</p>
+    </div>
+  </div>
+
+  <div class="support">
+    <h3>Besoin d'aide&nbsp;?</h3>
+    <p>Notre équipe est disponible pour vous accompagner durant l'installation.</p>
+    <div class="support-links">
+      <a href="https://wa.me/21626349649" class="support-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.88 11.9L4 20l4.2-1.1a7.93 7.93 0 0 0 3.83.98h.01a7.94 7.94 0 0 0 7.95-7.93 7.9 7.9 0 0 0-2.4-5.63zm-5.55 12.2h-.01a6.59 6.59 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.43-.16-.25a6.6 6.6 0 1 1 5.6 3.1zm3.6-4.95c-.2-.1-1.17-.58-1.35-.65-.18-.06-.31-.1-.45.1-.13.2-.51.65-.62.78-.12.13-.23.15-.43.05-.2-.1-.83-.31-1.59-.99-.59-.52-.98-1.18-1.1-1.38-.12-.2-.01-.3.09-.4.09-.09.2-.23.3-.35.1-.12.13-.2.2-.33.06-.13.03-.25-.02-.35-.05-.1-.45-1.07-.62-1.47-.16-.39-.33-.33-.45-.34h-.38a.74.74 0 0 0-.54.25 2.24 2.24 0 0 0-.7 1.66c0 .98.71 1.93.81 2.06.1.13 1.4 2.13 3.39 2.99.47.2.84.33 1.13.42.48.15.91.13 1.25.08.38-.06 1.17-.48 1.34-.95.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23z"/></svg>
+        WhatsApp
+      </a>
+      <a href="mailto:benfarhat.ma@gmail.com" class="support-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        Email
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © 2026 ArenaMudir · <a href="/" style="color:var(--text2);text-decoration:none;">arenamudir.com</a>
+</footer>
+
+</body>
+</html>
